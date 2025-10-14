@@ -23,7 +23,7 @@ const app = express();
 const port = process.env.PORT || 3022;
 
 app.use(cors({
-  origin: 'https://online-cinema-booking.vercel.app/',
+  origin: 'https://online-cinema-booking.vercel.app',
   credentials: true,
 }));
 
