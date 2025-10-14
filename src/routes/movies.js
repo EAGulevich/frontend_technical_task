@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { movies, movieSessions } from'../data/index.js';
+import { movies, movieSessions } from '../data/index.js';
 
 const router = Router();
 
@@ -29,8 +29,8 @@ router.get('/movies', async (req, res) => {
  * @openapi
  * /movies/{movieId}/sessions:
  *   get:
- *     summary: Получить список киносеансов для фильма
- *     description: Возвращает список всех доступных киносеансов для указанного фильма.
+ *     summary: Получить список киносеансов для фильма с данными фильма
+ *     description: Возвращает данные фильма и список всех доступных киносеансов для указанного фильма.
  *     tags:
  *       - Movies
  *     parameters:
@@ -42,13 +42,18 @@ router.get('/movies', async (req, res) => {
  *           description: Идентификатор фильма
  *     responses:
  *       200:
- *         description: Список киносеансов с фильмом
+ *         description: Данные фильма и список киносеансов
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/MovieSession'
+ *               type: object
+ *               properties:
+ *                 movieData:
+ *                   $ref: '#/components/schemas/Movie'
+ *                 sessions:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/MovieSession'
  *       404:
  *         description: Фильм не найден
  *         content:
@@ -65,9 +70,12 @@ router.get('/movies/:movieId/sessions', async (req, res) => {
     return res.status(404).json({ message: 'Фильм не найден' });
   }
 
-  const sessions = movieSessions
-    .filter((session) => session.movieId === movieId)
-    .map(({ seats, ...session }) => session);
+  const sessions = {
+    movieData: movie,
+    sessions: movieSessions
+      .filter((session) => session.movieId === movieId)
+      .map(({ seats, ...session }) => session),
+  };
 
   res.json(sessions);
 });
