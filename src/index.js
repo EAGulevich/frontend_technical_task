@@ -2,6 +2,7 @@ import './loadEnv.js';
 import url from 'url';
 import express from 'express';
 import passport from 'passport';
+import cors from 'cors';
 import authRouter from './routes/auth.js';
 import moviesRouter from './routes/movies.js';
 import cinemasRouter from './routes/cinemas.js';
@@ -20,6 +21,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3022;
+
+app.use(cors({
+  origin: 'https://online-cinema-booking.vercel.app/',
+  credentials: true,
+}));
 
 app.use(express.json());
 app.use(passport.initialize());
