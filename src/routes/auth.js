@@ -13,7 +13,7 @@ const router = Router();
  *     summary: Вход пользователя
  *     description: Аутентификация пользователя и получение JWT токена.
  *     tags:
- *       - Аутентификация
+ *       - Login
  *     requestBody:
  *       required: true
  *       content:
@@ -75,7 +75,7 @@ router.post('/login', async (req, res) => {
  *     summary: Регистрация нового пользователя
  *     description: Регистрация нового пользователя в системе.
  *     tags:
- *       - Аутентификация
+ *       - Register
  *     requestBody:
  *       required: true
  *       content:

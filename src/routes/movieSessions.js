@@ -12,7 +12,7 @@ const router = Router();
  *     summary: Получить детали сеанса
  *     description: Возвращает детальную информацию о сеансе, включая забронированные места.
  *     tags:
- *       - Киносеансы
+ *       - MovieSessions
  *     parameters:
  *       - in: path
  *         name: movieSessionId
@@ -55,7 +55,7 @@ router.get('/movieSessions/:movieSessionId', (req, res) => {
  *     summary: Забронировать места на киносеанс
  *     description: Бронирует указанные места на киносеанс для аутентифицированного пользователя.
  *     tags:
- *       - Киносеансы
+ *       - MovieSessions
  *     security:
  *       - bearerAuth: []
  *     parameters:

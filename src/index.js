@@ -37,6 +37,10 @@ app.use(usersRouter);
 app.use(settingsRouter);
 app.use(bookingsRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get('/api-json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 app.use('/static', express.static(path.join(__dirname, '../static')));
 
 app.listen(port, () => {
