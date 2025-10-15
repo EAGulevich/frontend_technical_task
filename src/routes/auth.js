@@ -2,7 +2,7 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../auth.js';
-import { users } from'../data/index.js';
+import { users } from '../data/index.js';
 
 const router = Router();
 
@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
  * /register:
  *   post:
  *     summary: Регистрация нового пользователя
- *     description: Регистрация нового пользователя в системе.
+ *     description: Регистрация нового пользователя в системе и получение JWT токена.
  *     tags:
  *       - Register
  *     requestBody:
@@ -93,6 +93,13 @@ router.post('/login', async (req, res) => {
  *     responses:
  *       201:
  *         description: Пользователь успешно зарегистрирован
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
  *       400:
  *         description: Требуется имя пользователя и пароль
  *         content:
@@ -118,14 +125,15 @@ router.post('/register', async (req, res) => {
     return res.status(400).json({ message: 'Требуется имя пользователя и пароль' });
   }
   try {
-    const existingUser = users.find(({ username }) => username === username);
+    const existingUser = users.find(({ username: u }) => u === username);
     if (existingUser) {
       return res.status(409).json({ message: 'Имя пользователя уже существует' });
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const user = { id: users.length + 1, username, password_hash: passwordHash };
     users.push(user);
-    res.status(201).json();
+    const token = jwt.sign({ sub: user.id }, JWT_SECRET, { expiresIn: '1h' });
+    res.status(201).json({ token });
   } catch (err) {
     const error = err instanceof Error ? err : new Error(String(err));
     res.status(500).json({ message: 'Ошибка регистрации', error: error.message });
