@@ -137,12 +137,12 @@ router.post('/movieSessions/:movieSessionId/bookings', authenticateToken, (req, 
   }
 
   const hasConflictedBooking = bookings.find((booking) =>
-    booking.seats.some((bookedSeat) =>
-      seats.find(
-        ({ rowNumber, seatNumber }) =>
-          bookedSeat.rowNumber === rowNumber && bookedSeat.seatNumber === seatNumber
+    booking.movieSessionId === movieSessionId && booking.seats.some((bookedSeat) =>
+        seats.find(
+          ({ rowNumber, seatNumber }) =>
+            bookedSeat.rowNumber === rowNumber && bookedSeat.seatNumber === seatNumber
+        )
       )
-    )
   );
 
   if (hasConflictedBooking) {
