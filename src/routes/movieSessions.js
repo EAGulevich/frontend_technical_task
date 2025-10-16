@@ -138,8 +138,14 @@ router.post('/movieSessions/:movieSessionId/bookings', authenticateToken, (req, 
     return res.status(400).json({ message: 'Неверное тело запроса' });
   }
 
-  const hasConflictedBooking = bookings.find((booking) =>
-    booking.movieSessionId === movieSessionId && booking.seats.some((bookedSeat) =>
+  if (!seats.length) {
+    return res.status(400).json({ message: 'Места не выбраны' });
+  }
+
+  const hasConflictedBooking = bookings.find(
+    (booking) =>
+      booking.movieSessionId === movieSessionId &&
+      booking.seats.some((bookedSeat) =>
         seats.find(
           ({ rowNumber, seatNumber }) =>
             bookedSeat.rowNumber === rowNumber && bookedSeat.seatNumber === seatNumber
