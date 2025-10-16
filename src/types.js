@@ -145,7 +145,7 @@
  *         userId:
  *           type: number
  *           description: Идентификатор пользователя
- *         isPayed:
+ *         isPaid:
  *           type: boolean
  *           description: Оплачено ли место
  *         seats:
