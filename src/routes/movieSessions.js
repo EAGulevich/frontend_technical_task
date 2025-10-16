@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { movieSessions, bookings } from'../data/index.js';
+import { movieSessions, bookings, movies, cinemas } from '../data/index.js';
 import { authenticateToken } from '../auth.js';
 
 const router = Router();
@@ -125,6 +125,8 @@ router.post('/movieSessions/:movieSessionId/bookings', authenticateToken, (req, 
 
   const movieSessionId = Number.parseInt(req.params.movieSessionId);
   const movieSession = movieSessions.find((s) => s.id === movieSessionId);
+  const movie = movies.find((m) => m.id === movieSession.movieId);
+  const cinema = cinemas.find((s) => s.id === movieSession.cinemaId);
 
   if (!movieSession) {
     return res.status(404).json({ message: 'Сеанс не найден' });
@@ -149,9 +151,18 @@ router.post('/movieSessions/:movieSessionId/bookings', authenticateToken, (req, 
     return res.status(409).json({ message: 'Места уже забронированы' });
   }
 
+  const startTime = movieSession.startTime;
+  const minutesLength = movie.lengthMinutes;
+  const movieTitle = movie.title;
+  const cinemaName = cinema.name;
+
   const newBooking = {
     id: uuidv4(),
     movieSessionId,
+    startTime,
+    minutesLength,
+    movieTitle,
+    cinemaName,
     userId: user.id,
     isPaid: false,
     seats,

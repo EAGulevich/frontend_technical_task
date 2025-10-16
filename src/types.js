@@ -208,6 +208,19 @@
  *         isPaid:
  *           type: boolean
  *           description: Статус оплаты
+ *         startTime:
+ *           type: string
+ *           format: date-time
+ *           description: Время начала сеанса
+ *         minutesLength:
+ *           type: number
+ *           description: Длительность фильма в минутах
+ *         cinemaName:
+ *           type: string
+ *           description: Название кинотеатра
+ *         movieTitle:
+ *           type: string
+ *           description: Название фильма
  */
 
 /**
